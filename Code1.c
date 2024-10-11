@@ -15,7 +15,7 @@ void printSales(float nums[12], char months[12][10]) {
     int i = 0;
     printf("Monthly Sales Report for 2024\n\nMonth    \tSales\n");
     while (i < 12) {
-        printf("%s\t%.2f\n", months[i], nums[i]);
+        printf("%s\t$%.2f\n", months[i], nums[i]);
         i++;
     }
 }
@@ -36,7 +36,57 @@ void printSalesReport(float nums[12], char months[12][10]) {
         i++;
     }
     average /= 12;
-    printf("\nSales summary report:\n\nMinimum Sales: %.2f (%s)", min, months[minpos]);
+    printf("\nSales summary report:\n\nMinimum Sales: $%.2f in %s\nMaximum Sales: $%.2f in %s\nAverage Sales: $%.2f\n", min, months[minpos], max, months[maxpos], average);
+}
+
+void printSixMonths(float nums[12]) {
+    printf("\nSix-month moving average report:\n\n");
+    for(int i = 0; i <= 6; i++) {
+        float average = 0;
+        for(int n = i; n <= i + 6; n++) {
+            average += nums[n];
+        }
+
+        if (i == 0) {
+            printf("January-June\t%.2f\n", average/6);
+        }
+        else if (i == 1) {
+            printf("February-July\t%.2f\n", average/6);
+        }
+        else if (i == 2) {
+            printf("March-August\t%.2f\n", average/6);
+        }
+        else if (i == 3) {
+            printf("April-September\t%.2f\n", average/6);
+        }
+        else if (i == 4) {
+            printf("May-October\t%.2f\n", average/6);
+        }
+        else if (i == 5) {
+            printf("June-November\t%.2f\n", average/6);
+        }
+        else if (i == 6) {
+            printf("July-December\t%.2f\n", average/6);
+        }
+    }
+}
+
+void printHighLow(float nums[12], char months[12][10]) {
+    printf("Sales report (highest to lowest)\n\nMonth    \tSales\n");
+    int count = 0;
+    while (count < 11) {
+        float max = nums[0];
+        int maxpos = 0;
+        for (int x = 0; x < 12; x++) {
+            if (max < nums[x]) {
+                max = nums[x];
+                maxpos = x;
+            }
+        }
+        nums[maxpos] = -1;
+        count++;
+        printf("%s\t$%.2f\n", months[maxpos], max);
+    }
 }
 
 int main() {
@@ -53,8 +103,10 @@ int main() {
     }
     fclose(fptr);
 
-    printSales(nums, months);
-    printSalesReport(nums, months);
+    //printSales(nums, months);
+    //printSalesReport(nums, months);
+    //printSixMonths(nums);
+    printHighLow(nums, months);
 
     return 0;
 
