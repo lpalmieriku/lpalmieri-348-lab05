@@ -8,34 +8,78 @@ Purpose:
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #define SIZE 5
 
-addMatrices(int matrix1[SIZE][SIZE], int matrix2[SIZE][SIZE]) {
-    int* sum[SIZE][SIZE];
+int **addMatrices(int matrix1[SIZE][SIZE], int matrix2[SIZE][SIZE]) {
+    int **sum;
 
-    int i = 0;
-    while (i < 5) {
-        int j = 0;
-        while (j < 5) {
-            sum[i][j] = matrix1[i][j] + matrix2[i][j];
-            j++;
-        }
-        i++;
+    sum = malloc(sizeof(int *) * SIZE);
+
+    for (int i = 0; i < SIZE; i++) {
+        sum[i] = malloc(sizeof(int) * SIZE);
     }
-    //printMatrix
+
+
+    for (int row = 0; row < SIZE; row++) {
+        for (int col = 0; col < SIZE; col++) {
+            sum[row][col] = matrix1[row][col] + matrix2[row][col];
+        }
+    }
+
+    return sum;
 }
 
-int* multiplyMatrices(int m1[SIZE][SIZE], int m2[SIZE][SIZE]) {
-    int* product[SIZE][SIZE];
+int **multiplyMatrices(int m1[SIZE][SIZE], int m2[SIZE][SIZE]) {
+    int **product;
 
-    int i = 0;
-    while(i < 5) {
-        int j = 0, sum = 0;
-        while(j < 5) {
-            j++;
-        }
-        i++;
+    product = malloc(sizeof(int *) * SIZE);
+
+    for (int i = 0; i < SIZE; i++) {
+        product[i] = malloc(sizeof(int) * SIZE);
     }
+
+    for (int row = 0; row < SIZE; row++) {
+        for (int col = 0; col < SIZE; col++) {
+            int sum = 0;
+            for (int x = 0; x < SIZE; x++) {
+                sum += (m1[row][x] * m2[x][col]);
+            }
+            product[row][col] = sum;
+        }
+    }
+
+    return product;
+
+}
+
+int **transposeMatrix(int mat[SIZE][SIZE]) {
+    int **transpose;
+
+    transpose = malloc(sizeof(int *) * SIZE);
+
+    for (int i = 0; i < SIZE; i++) {
+        transpose[i] = malloc(sizeof(int) * SIZE);
+    }
+
+    for  (int row = 0; row < SIZE; row++) {
+        for (int col = 0; col < SIZE; col++) {
+
+            transpose[row][col] = mat[col][row];
+        }
+    }
+
+    return transpose;
+}
+
+void printMatrix(int **mat) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            printf("%d ", mat[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
 int main() {
@@ -53,16 +97,30 @@ int main() {
     {10, 9, 8, 7, 6},
     {5, 4, 3, 2, 1}
     };
+    int **totalSum, **totalProduct, **mattranspose;
 
+    
     if(sizeof(m1)/sizeof(m1[0]) == sizeof(m2)/sizeof(m2[0]) && sizeof(m1[0])/sizeof(m1[0][0]) == sizeof(m2[0])/sizeof(m2[0][0])) {
-        addMatrices(m1,m2);
+        totalSum = addMatrices(m1,m2);
+        printMatrix(totalSum);
     }
     else {
         printf("Invalid operation! The matrices are not the same size!");
     }
 
     if(sizeof(m1)/sizeof(m1[0]) == sizeof(m2[0])/sizeof(m2[0][0])) {
-        int* totalProduct = multiplyMatrices(m1,m2);
+        totalProduct = multiplyMatrices(m1,m2);
+        printMatrix(totalProduct);
+
+    }
+    else {
+        printf("Invalid operation! The 1st matrix number of rows does not equal to the 2nd matrix number of columns.");
+    }
+
+    if(sizeof(m1)/sizeof(m1[0]) == sizeof(m2[0])/sizeof(m2[0][0])) {
+        mattranspose = transposeMatrix(m1);
+        printMatrix(mattranspose);
+
     }
     else {
         printf("Invalid operation! The 1st matrix number of rows does not equal to the 2nd matrix number of columns.");
